@@ -67,6 +67,15 @@ const handler = async (request, response) => {
             return response.end(JSON.stringify({ message: "Successfully deleted" }));
         })
     }
+
+    if(request.url == "/animes" && request.method == "GET") {
+        const sql = "SELECT * FROM animes";
+        db.query(sql, (err, result) => {
+            if(err) throw new Error(err);
+
+            return response.end(JSON.stringify(result))
+        })
+    }
 }
 
 http.createServer(handler).listen(PORT, () => console.log("Server is running..."));
