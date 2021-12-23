@@ -76,6 +76,63 @@ const handler = async (request, response) => {
             return response.end(JSON.stringify(result))
         })
     }
+
+    if(request.url.includes("/updatename") && request.method == "PUT") {
+        for await(const data of request) {
+            const { name } = JSON.parse(data);
+
+            if(!name) return response.end(JSON.stringify({
+                error: "Cannot be null!"
+            }))
+
+            const sql = "UPDATE animes SET name = ? WHERE anime_id = ?"
+            db.query(sql, [name, anime_id], (err, result) => {
+                if(err) throw new Error(err);
+
+                return response.end(JSON.stringify({
+                    message: "Successfully updated!"
+                }))
+            })
+        }
+    }
+
+    if(request.url.includes("/updatesinopse") && request.method == "PUT") {
+        for await(const data of request) {
+            const { sinopse } = JSON.parse(data);
+
+            if(!sinopse) return response.end(JSON.stringify({
+                error: "Cannot be null!"
+            }))
+
+            const sql = "UPDATE animes SET sinopse = ? WHERE anime_id = ?"
+            db.query(sql, [sinopse, anime_id], (err, result) => {
+                if(err) throw new Error(err);
+
+                return response.end(JSON.stringify({
+                    message: "Successfully updated!"
+                }))
+            })
+        }
+    }
+
+    if(request.url.includes("/updatecover") && request.method == "PUT") {
+        for await(const data of request) {
+            const { cover } = JSON.parse(data);
+
+            if(!cover) return response.end(JSON.stringify({
+                error: "Cannot be null!"
+            }))
+
+            const sql = "UPDATE animes SET cover = ? WHERE anime_id = ?"
+            db.query(sql, [cover, anime_id], (err, result) => {
+                if(err) throw new Error(err);
+
+                return response.end(JSON.stringify({
+                    message: "Successfully updated!"
+                }))
+            })
+        }
+    }
 }
 
 http.createServer(handler).listen(PORT, () => console.log("Server is running..."));
