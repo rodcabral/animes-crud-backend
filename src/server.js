@@ -11,6 +11,9 @@ function defaultHeader(response, cors = false) {
 
 const handler = async (request, response) => {
     
+    let url = request.url;
+    let anime_id = url.split("/")[2];
+
     if(request.url == "/" && request.method == "GET") {
         defaultHeader(response);
 
@@ -50,6 +53,19 @@ const handler = async (request, response) => {
             );
 
         }
+    }
+
+    if(request.url.includes("/delete") && request.method == "DELETE") {
+        const sql = "DELETE FROM animes WHERE anime_id = " + anime_id;
+        db.query(sql, (err, result) => {
+            if(err) throw new Error(err);
+
+            if(result.affectedRows == 0) {
+                return response.end(JSON.stringify({ message: "Cannot find this ID!" }));
+            }
+
+            return response.end(JSON.stringify({ message: "Successfully deleted" }));
+        })
     }
 }
 
