@@ -5,7 +5,7 @@ import http from "http";
 import { db } from "../database/index.js";
 const PORT = process.env.PORT || 3333;
 
-function defaultHeader(response, cors = false) {
+function defaultHeader(response, cors = true) {
     response.writeHead(200, {"Content-Type": "application/json", "Access-Control-Allow-Origin": cors ? "*" : ""});
 }
 
@@ -23,6 +23,7 @@ const handler = async (request, response) => {
     }
 
     if(request.url == "/new" && request.method == "POST") {
+        defaultHeader(response);
         for await (const data of request) {
             const { name, sinopse, cover } = JSON.parse(data);
 
@@ -56,6 +57,7 @@ const handler = async (request, response) => {
     }
 
     if(request.url.includes("/delete") && request.method == "DELETE") {
+        defaultHeader(response);
         const sql = "DELETE FROM animes WHERE anime_id = " + anime_id;
         db.query(sql, (err, result) => {
             if(err) throw new Error(err);
@@ -69,6 +71,7 @@ const handler = async (request, response) => {
     }
 
     if(request.url == "/animes" && request.method == "GET") {
+        defaultHeader(response);
         const sql = "SELECT * FROM animes";
         db.query(sql, (err, result) => {
             if(err) throw new Error(err);
@@ -78,6 +81,7 @@ const handler = async (request, response) => {
     }
 
     if(request.url.includes("/updatename") && request.method == "PUT") {
+        defaultHeader(response);
         for await(const data of request) {
             const { name } = JSON.parse(data);
 
@@ -97,6 +101,7 @@ const handler = async (request, response) => {
     }
 
     if(request.url.includes("/updatesinopse") && request.method == "PUT") {
+        defaultHeader(response);
         for await(const data of request) {
             const { sinopse } = JSON.parse(data);
 
@@ -116,6 +121,7 @@ const handler = async (request, response) => {
     }
 
     if(request.url.includes("/updatecover") && request.method == "PUT") {
+        defaultHeader(response);
         for await(const data of request) {
             const { cover } = JSON.parse(data);
 
