@@ -56,7 +56,7 @@ const handler = async (request, response) => {
         }
     }
 
-    if(request.url.includes("/delete") && request.method == "DELETE") {
+    if(request.url.includes("/delete") && request.method == "GET") {
         defaultHeader(response);
         const sql = "DELETE FROM animes WHERE anime_id = " + anime_id;
         db.query(sql, (err, result) => {
